@@ -273,7 +273,17 @@ const DoctorDashboard: React.FC = () => {
           ? `0 0 0 1px ${alpha(theme.palette.error.main, 0.18)}`
           : 'none',
       alignItems: 'flex-start',
-      pr: { xs: 14, sm: 22 },
+      pr: { xs: 2, sm: 22 },
+      flexWrap: 'wrap',
+      '& .MuiListItemSecondaryAction-root': {
+        position: { xs: 'static', sm: 'absolute' },
+        top: { sm: '50%' },
+        transform: { xs: 'none', sm: 'translateY(-50%)' },
+        right: { sm: 16 },
+        mt: { xs: 1.5, sm: 0 },
+        width: { xs: '100%', sm: 'auto' },
+        maxWidth: '100%'
+      },
       '& .MuiIconButton-root': {
         color: accentColor
       }
@@ -297,6 +307,34 @@ const DoctorDashboard: React.FC = () => {
     borderColor: alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.14 : 0.08),
     borderRadius: 1.5,
     color: 'text.primary'
+  }
+
+  const reportSecondaryActionSx = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1,
+    alignItems: { xs: 'stretch', sm: 'flex-end' },
+    width: { xs: '100%', sm: 'auto' },
+    minWidth: { sm: 180 },
+    maxWidth: '100%'
+  }
+
+  const reportActionButtonSx = {
+    width: { xs: '100%', sm: 'auto' },
+    maxWidth: '100%',
+    minWidth: { sm: 'fit-content' },
+    whiteSpace: 'normal',
+    textAlign: 'center',
+    justifyContent: 'center',
+    lineHeight: 1.3
+  }
+
+  const reportIconActionsSx = {
+    display: 'flex',
+    gap: 1,
+    flexWrap: 'wrap',
+    justifyContent: { xs: 'space-between', sm: 'flex-end' },
+    width: { xs: '100%', sm: 'auto' }
   }
 
   const formatLocationSummary = (location?: HealthReport['location']) => {
@@ -527,13 +565,14 @@ const DoctorDashboard: React.FC = () => {
                         key={report.id}
                         sx={getReportItemSx(report.urgency)}
                         secondaryAction={
-                          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-end', minWidth: { xs: 140, sm: 180 } }}>
+                          <Box sx={reportSecondaryActionSx}>
                             {(!report.assignedDoctorId || report.assignedDoctorId === user!.id) && (
                               <Button
                                 variant="contained"
                                 size="small"
                                 startIcon={<Send />}
                                 onClick={() => handleRespondToReport(report)}
+                                sx={reportActionButtonSx}
                               >
                                 {report.assignedDoctorId === user!.id ? t('Continue') : t('Respond')}
                               </Button>
@@ -545,10 +584,11 @@ const DoctorDashboard: React.FC = () => {
                               startIcon={<Delete />}
                               onClick={() => openDeleteDialog(report)}
                               disabled={deletingReportId === report.id}
+                              sx={reportActionButtonSx}
                             >
                               {deletingReportId === report.id ? t('Deleting...') : t('Delete Report')}
                             </Button>
-                            <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Box sx={reportIconActionsSx}>
                               <Tooltip title={t('Open Chat')}>
                                 <IconButton size="small" color="primary" aria-label={t('Open Chat')}>
                                   <Chat />
@@ -571,7 +611,7 @@ const DoctorDashboard: React.FC = () => {
                        <ListItemText
                          secondaryTypographyProps={{ component: 'div', color: 'text.primary' }}
                          primary={
-                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
                              <Typography variant="h6">
                                {formatPersonName(report.userName || '', 'villager')}
                              </Typography>
@@ -728,13 +768,14 @@ const DoctorDashboard: React.FC = () => {
                         key={report.id}
                         sx={getReportItemSx(report.urgency)}
                         secondaryAction={
-                          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-end', minWidth: { xs: 140, sm: 180 } }}>
+                          <Box sx={reportSecondaryActionSx}>
                             {(!report.assignedDoctorId || report.assignedDoctorId === user!.id) && (
                               <Button
                                 variant="contained"
                                 size="small"
                                 startIcon={<Send />}
                                 onClick={() => handleRespondToReport(report)}
+                                sx={reportActionButtonSx}
                               >
                                 {report.assignedDoctorId === user!.id ? t('Continue') : t('Respond')}
                               </Button>
@@ -746,10 +787,11 @@ const DoctorDashboard: React.FC = () => {
                               startIcon={<Delete />}
                               onClick={() => openDeleteDialog(report)}
                               disabled={deletingReportId === report.id}
+                              sx={reportActionButtonSx}
                             >
                               {deletingReportId === report.id ? t('Deleting...') : t('Delete Report')}
                             </Button>
-                            <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Box sx={reportIconActionsSx}>
                               <Tooltip title={t('Open Chat')}>
                                 <IconButton size="small" color="primary" aria-label={t('Open Chat')}>
                                   <Chat />
@@ -772,7 +814,7 @@ const DoctorDashboard: React.FC = () => {
                        <ListItemText
                          secondaryTypographyProps={{ component: 'div', color: 'text.primary' }}
                          primary={
-                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
                              <Typography variant="h6">
                                {formatPersonName(report.userName || '', 'villager')}
                              </Typography>
@@ -891,13 +933,14 @@ const DoctorDashboard: React.FC = () => {
                           key={report.id}
                           sx={getReportItemSx(report.urgency)}
                           secondaryAction={
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-end', minWidth: { xs: 140, sm: 180 } }}>
+                            <Box sx={reportSecondaryActionSx}>
                               {(!report.assignedDoctorId || report.assignedDoctorId === user!.id) && (
                                 <Button
                                   variant="contained"
                                   size="small"
                                   startIcon={<Send />}
                                   onClick={() => handleRespondToReport(report)}
+                                  sx={reportActionButtonSx}
                                 >
                                   {report.assignedDoctorId === user!.id ? t('Continue') : t('Respond')}
                                 </Button>
@@ -908,7 +951,7 @@ const DoctorDashboard: React.FC = () => {
                           <ListItemText
                             secondaryTypographyProps={{ component: 'div', color: 'text.primary' }}
                             primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                                 <Typography variant="h6">{formatPersonName(report.userName || '', 'villager')}</Typography>
                                 <Chip label={translateUrgency(report.urgency)} size="small" sx={getUrgencyChipSx(report.urgency)} />
                                 <Chip label={translateStatus('pending')} size="small" color={getStatusColor('pending') as any} variant="outlined" />
@@ -987,13 +1030,14 @@ const DoctorDashboard: React.FC = () => {
                           key={report.id}
                           sx={getReportItemSx(report.urgency)}
                           secondaryAction={
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-end', minWidth: { xs: 140, sm: 180 } }}>
+                            <Box sx={reportSecondaryActionSx}>
                               {report.assignedDoctorId === user!.id && (
                                 <Button
                                   variant="contained"
                                   size="small"
                                   startIcon={<Send />}
                                   onClick={() => handleRespondToReport(report)}
+                                  sx={reportActionButtonSx}
                                 >
                                   {t('Continue')}
                                 </Button>
@@ -1004,7 +1048,7 @@ const DoctorDashboard: React.FC = () => {
                           <ListItemText
                             secondaryTypographyProps={{ component: 'div', color: 'text.primary' }}
                             primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                                 <Typography variant="h6">{formatPersonName(report.userName || '', 'villager')}</Typography>
                                 <Chip label={translateUrgency(report.urgency)} size="small" sx={getUrgencyChipSx(report.urgency)} />
                                 <Chip label={translateStatus('reviewed')} size="small" color={getStatusColor('reviewed') as any} variant="outlined" />
@@ -1127,7 +1171,18 @@ const DoctorDashboard: React.FC = () => {
                 </Select>
               </FormControl>
             </DialogContent>
-            <DialogActions>
+            <DialogActions
+              sx={{
+                px: { xs: 2, sm: 3 },
+                pb: 2,
+                flexWrap: 'wrap',
+                gap: 1,
+                '& > :not(style)': {
+                  ml: '0 !important',
+                  width: { xs: '100%', sm: 'auto' }
+                }
+              }}
+            >
               <Button onClick={() => setResponseDialog(false)}>
                 {t('Cancel')}
               </Button>
@@ -1160,7 +1215,18 @@ const DoctorDashboard: React.FC = () => {
                 {reportPendingDelete?.symptoms || t('Delete Report')}
               </Typography>
             </DialogContent>
-            <DialogActions>
+            <DialogActions
+              sx={{
+                px: { xs: 2, sm: 3 },
+                pb: 2,
+                flexWrap: 'wrap',
+                gap: 1,
+                '& > :not(style)': {
+                  ml: '0 !important',
+                  width: { xs: '100%', sm: 'auto' }
+                }
+              }}
+            >
               <Button variant="outlined" onClick={handleCancelDelete} disabled={Boolean(deletingReportId)}>
                 {t('No')}
               </Button>

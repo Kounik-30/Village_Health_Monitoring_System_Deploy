@@ -161,6 +161,20 @@ const Profile: React.FC = () => {
     }))
   }
 
+  const actionButtonSx = {
+    width: { xs: '100%', sm: 'auto' },
+    maxWidth: '100%',
+    flex: { xs: '1 1 100%', sm: '0 1 auto' },
+    minWidth: { sm: 'fit-content' },
+    px: { xs: 2, sm: 2.5 },
+    py: { xs: 1.25, sm: 1.1 },
+    fontSize: { xs: '0.875rem', sm: '0.95rem' },
+    justifyContent: 'center',
+    textAlign: 'center',
+    whiteSpace: 'normal',
+    lineHeight: 1.3
+  }
+
   if (!user) {
     return (
       <Container maxWidth="md">
@@ -170,15 +184,26 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ pb: 6 }}>
+    <Container maxWidth="md" sx={{ pb: 6, px: { xs: 1.5, sm: 3 } }}>
       {/* Header Card with Avatar */}
-      <Card elevation={3} sx={{ mb: 3 }}>
-        <CardContent>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Box sx={{ position: 'relative' }}>
+      <Card elevation={3} sx={{ mb: 3, overflow: 'hidden' }}>
+        <CardContent sx={{ p: { xs: 2, sm: 3 }, '&:last-child': { pb: { xs: 2, sm: 3 } } }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 2, sm: 3 }}
+            alignItems={{ xs: 'stretch', md: 'center' }}
+            useFlexGap
+          >
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              alignItems={{ xs: 'center', sm: 'center' }}
+              sx={{ flex: 1, minWidth: 0 }}
+            >
+            <Box sx={{ position: 'relative', flexShrink: 0, alignSelf: { xs: 'center', sm: 'flex-start' } }}>
               <Avatar
                 src={form.profilePicture || undefined}
-                sx={{ width: 96, height: 96, bgcolor: 'primary.main', fontSize: 32 }}
+                sx={{ width: { xs: 88, sm: 96 }, height: { xs: 88, sm: 96 }, bgcolor: 'primary.main', fontSize: { xs: 30, sm: 32 } }}
               >
                 {avatarLetters}
               </Avatar>
@@ -186,31 +211,61 @@ const Profile: React.FC = () => {
                 <IconButton
                   component="label"
                   aria-label={t('upload picture')}
-                  sx={{ position: 'absolute', right: -8, bottom: -8, bgcolor: 'background.paper', boxShadow: 2 }}
+                  sx={{
+                    position: 'absolute',
+                    right: { xs: 4, sm: -8 },
+                    bottom: { xs: 4, sm: -8 },
+                    bgcolor: 'background.paper',
+                    boxShadow: 2,
+                    width: 40,
+                    height: 40
+                  }}
                 >
                   <PhotoCameraIcon />
                   <input hidden accept="image/*" type="file" onChange={handleImageChange} />
                 </IconButton>
               )}
             </Box>
-            <Box>
-              <Typography variant="h5" fontWeight={600}>{localizedProfileName}</Typography>
-              <Typography variant="body2" color="text.secondary">{t('Role')}: {t(user.role)}</Typography>
-              <Typography variant="body2" color="text.secondary">{t('Member since')} {memberSinceDate}</Typography>
+            <Box sx={{ minWidth: 0, textAlign: { xs: 'center', sm: 'left' } }}>
+              <Typography variant="h5" fontWeight={600} sx={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                {localizedProfileName}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ wordBreak: 'break-word' }}>
+                {t('Role')}: {t(user.role)}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ wordBreak: 'break-word' }}>
+                {t('Member since')} {memberSinceDate}
+              </Typography>
             </Box>
-            <Box sx={{ flexGrow: 1 }} />
+            </Stack>
+            <Box sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0 }}>
             {!isEditing ? (
-              <Button variant="contained" startIcon={<EditIcon />} onClick={() => setIsEditing(true)}>
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                onClick={() => setIsEditing(true)}
+                sx={actionButtonSx}
+              >
                 {t('Edit Profile')}
               </Button>
             ) : (
-              <Stack direction="row" spacing={1}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 1.25,
+                  width: '100%',
+                  justifyContent: { xs: 'stretch', md: 'flex-end' },
+                  alignItems: 'stretch'
+                }}
+              >
                 <Button
                   variant="contained"
                   color="success"
                   startIcon={<SaveIcon />}
                   onClick={handleSave}
                   disabled={saving}
+                  sx={actionButtonSx}
                 >
                   {t('save')}
                 </Button>
@@ -220,6 +275,7 @@ const Profile: React.FC = () => {
                   startIcon={<CancelIcon />}
                   onClick={handleCancel}
                   disabled={saving}
+                  sx={actionButtonSx}
                 >
                   {t('cancel')}
                 </Button>
@@ -229,20 +285,22 @@ const Profile: React.FC = () => {
                   startIcon={<DeleteOutlineIcon />}
                   onClick={handleRemovePhoto}
                   disabled={saving}
+                  sx={actionButtonSx}
                 >
                   {t('Remove Photo')}
                 </Button>
-              </Stack>
+              </Box>
             )}
+            </Box>
           </Stack>
         </CardContent>
       </Card>
 
       {/* Personal Information */}
-      <Card elevation={1} sx={{ mb: 3 }}>
+      <Card elevation={1} sx={{ mb: 3, overflow: 'hidden' }}>
         <CardHeader title={t('Personal Information')} />
         <Divider />
-        <CardContent>
+        <CardContent sx={{ px: { xs: 2, sm: 3 } }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -312,10 +370,10 @@ const Profile: React.FC = () => {
       </Card>
 
       {/* Role-specific Information */}
-      <Card elevation={1} sx={{ mb: 3 }}>
+      <Card elevation={1} sx={{ mb: 3, overflow: 'hidden' }}>
         <CardHeader title={t('Role Details')} />
         <Divider />
-        <CardContent>
+        <CardContent sx={{ px: { xs: 2, sm: 3 } }}>
           <Grid container spacing={2}>
             {user.role === 'doctor' && (
               <>

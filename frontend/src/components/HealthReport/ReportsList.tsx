@@ -121,6 +121,7 @@ const ReportsList: React.FC = () => {
       urgency === 'emergency'
         ? alpha(theme.palette.error.main, theme.palette.mode === 'dark' ? 0.14 : 0.06)
         : 'background.paper',
+    overflow: 'hidden',
     '&:hover': {
       boxShadow: theme.palette.mode === 'dark' ? 8 : 4
     }
@@ -291,9 +292,18 @@ const ReportsList: React.FC = () => {
                   >
                     <CardContent>
                       {/* Header */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                        <Box>
-                          <Typography variant="h6" gutterBottom>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'flex-start',
+                          mb: 2,
+                          gap: 1.5,
+                          flexWrap: 'wrap'
+                        }}
+                      >
+                        <Box sx={{ minWidth: 0, flex: '1 1 220px' }}>
+                          <Typography variant="h6" gutterBottom sx={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                             {localizeSymptomList(report.symptoms).length > 50 
                               ? `${localizeSymptomList(report.symptoms).substring(0, 50)}...` 
                               : localizeSymptomList(report.symptoms)
@@ -303,7 +313,16 @@ const ReportsList: React.FC = () => {
                             {formatDate(report.createdAt)}
                           </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            flexWrap: 'wrap',
+                            justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+                            maxWidth: '100%'
+                          }}
+                        >
                           {report.urgency === 'emergency' && (
                             <Warning sx={{ color: getUrgencyColor(report.urgency) }} />
                           )}
@@ -318,7 +337,7 @@ const ReportsList: React.FC = () => {
                             color="error"
                             size="small"
                             onClick={() => openDeleteDialog(report.id)}
-                            sx={{ ml: 1 }}
+                            sx={{ ml: { xs: 0, sm: 1 }, flexShrink: 0 }}
                           >
                             <Delete />
                           </IconButton>
@@ -326,7 +345,16 @@ const ReportsList: React.FC = () => {
                       </Box>
 
                       {/* Status and Location */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          mb: 2,
+                          gap: 1,
+                          flexWrap: 'wrap'
+                        }}
+                      >
                         <Chip
                           icon={getStatusIcon(report.status)}
                           label={t(report.status)}
@@ -483,7 +511,15 @@ const ReportsList: React.FC = () => {
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.3)'
           }
         }}
-        PaperProps={{ sx: { borderRadius: 2, boxShadow: 6, minWidth: 320 } }}
+                        PaperProps={{
+                          sx: {
+                            borderRadius: 2,
+                            boxShadow: 6,
+                            width: 'calc(100% - 24px)',
+                            maxWidth: 420,
+                            m: 1.5
+                          }
+                        }}
       >
         <DialogTitle sx={{ fontWeight: 600 }}>{t('Delete Report')}</DialogTitle>
         <DialogContent>
@@ -492,7 +528,18 @@ const ReportsList: React.FC = () => {
             {t('This will hide the report from your view only.')}
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions
+          sx={{
+            px: { xs: 2, sm: 3 },
+            pb: 2,
+            flexWrap: 'wrap',
+            gap: 1,
+            '& > :not(style)': {
+              ml: '0 !important',
+              width: { xs: '100%', sm: 'auto' }
+            }
+          }}
+        >
           <Button variant="outlined" onClick={handleCancelDelete} sx={{ borderRadius: 2 }}>{t('No')}</Button>
           <Button variant="contained" color="error" onClick={handleConfirmDelete} sx={{ borderRadius: 2 }}>{t('Yes')}</Button>
         </DialogActions>
