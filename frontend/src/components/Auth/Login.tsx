@@ -47,7 +47,7 @@ const Login: React.FC = () => {
   const { t, language, setLanguage } = useTranslate()
   const { showToast } = useNotifications()
   const theme = useTheme()
-  useMediaQuery(theme.breakpoints.down('md'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const roleIcons = {
     villager: <PersonOutline />,
@@ -102,12 +102,20 @@ const Login: React.FC = () => {
         background: `linear-gradient(135deg, ${designTokens.colors.primary.main}15 0%, ${designTokens.colors.secondary.main}15 100%)`,
         display: 'flex',
         alignItems: 'center',
-        py: 4,
+        py: { xs: 2, sm: 4 },
       }}
     >
       <Container component="main" maxWidth="lg">
-        <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-          <FormControl size="small">
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            mb: { xs: 1.5, sm: 2 },
+            px: { xs: 0.5, sm: 0 },
+            width: '100%'
+          }}
+        >
+          <FormControl size="small" sx={{ width: { xs: '100%', sm: 'auto' }, maxWidth: { xs: 220, sm: 'none' } }}>
             <InputLabel>{t('Language')}</InputLabel>
             <Select
               value={language}
@@ -116,7 +124,7 @@ const Login: React.FC = () => {
               startAdornment={<Language />}
               sx={{
                 ...glassEffect,
-                minWidth: 150,
+                minWidth: { xs: '100%', sm: 150 },
               }}
             >
               {LANGUAGE_OPTIONS.map((option) => (
@@ -128,20 +136,21 @@ const Login: React.FC = () => {
           </FormControl>
         </Box>
 
-        <Grid container spacing={6} alignItems="center">
+        <Grid container spacing={{ xs: 3, md: 6 }} alignItems="center">
           {/* Left Side - Login Form */}
           <Grid item xs={12} md={6}>
             <Card sx={{ 
               ...glassEffect, 
               maxWidth: 500, 
               mx: 'auto',
+              width: '100%',
               background: 'rgba(255, 255, 255, 0.15)',
               backdropFilter: 'blur(25px)',
               WebkitBackdropFilter: 'blur(25px)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
               boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.2)',
             }}>
-              <CardContent sx={{ p: 4 }}>
+              <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
                 <Box sx={{ textAlign: 'center', mb: 4 }}>
                   <Avatar
                     sx={{
@@ -161,6 +170,7 @@ const Login: React.FC = () => {
                     sx={{
                       mb: 1,
                       fontWeight: 700,
+                      fontSize: { xs: '2rem', sm: '2.125rem' },
                       background: designTokens.colors.primary.gradient,
                       backgroundClip: 'text',
                       WebkitBackgroundClip: 'text',
@@ -357,6 +367,7 @@ const Login: React.FC = () => {
                   overflow: 'hidden',
                   maxWidth: 400,
                   mx: 'auto',
+                  width: '100%',
                   '&:hover': {
                     transform: 'translateY(-8px) rotateY(5deg)',
                     boxShadow: designTokens.shadows.strong,
@@ -369,7 +380,7 @@ const Login: React.FC = () => {
                   alt={t('Village Health Monitor Dashboard')}
                   style={{
                     width: '100%',
-                    height: '500px',
+                    height: isMobile ? '280px' : '500px',
                     objectFit: 'cover',
                   }}
                 />

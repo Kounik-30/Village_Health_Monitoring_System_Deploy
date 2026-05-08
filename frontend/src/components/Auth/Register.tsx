@@ -37,7 +37,7 @@ import { LANGUAGE_OPTIONS, type SupportedLanguage } from '../../constants/langua
 
 const Register: React.FC = () => {
   const theme = useTheme()
-  useMediaQuery(theme.breakpoints.down('md'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   
   const [formData, setFormData] = useState({
     email: '',
@@ -155,12 +155,20 @@ const Register: React.FC = () => {
         background: `linear-gradient(135deg, ${designTokens.colors.secondary.main}15 0%, ${designTokens.colors.primary.main}15 100%)`,
         display: 'flex',
         alignItems: 'center',
-        py: 4,
+        py: { xs: 2, sm: 4 },
       }}
     >
       <Container component="main" maxWidth="lg">
-        <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-          <FormControl size="small">
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            mb: { xs: 1.5, sm: 2 },
+            px: { xs: 0.5, sm: 0 },
+            width: '100%'
+          }}
+        >
+          <FormControl size="small" sx={{ width: { xs: '100%', sm: 'auto' }, maxWidth: { xs: 220, sm: 'none' } }}>
             <InputLabel>{t('Language')}</InputLabel>
             <Select
               value={language}
@@ -169,7 +177,7 @@ const Register: React.FC = () => {
               startAdornment={<Language />}
               sx={{
                 ...glassEffect,
-                minWidth: 150,
+                minWidth: { xs: '100%', sm: 150 },
               }}
             >
               {LANGUAGE_OPTIONS.map((option) => (
@@ -181,20 +189,21 @@ const Register: React.FC = () => {
           </FormControl>
         </Box>
 
-        <Grid container spacing={6} alignItems="center">
+        <Grid container spacing={{ xs: 3, md: 6 }} alignItems="center">
           {/* Left Side - Registration Form */}
           <Grid item xs={12} md={7}>
             <Card sx={{ 
               ...glassEffect, 
               maxWidth: 600, 
               mx: 'auto',
+              width: '100%',
               background: 'rgba(255, 255, 255, 0.15)',
               backdropFilter: 'blur(25px)',
               WebkitBackdropFilter: 'blur(25px)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
               boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.2)',
             }}>
-              <CardContent sx={{ p: 4 }}>
+              <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
                 <Box sx={{ textAlign: 'center', mb: 4 }}>
                   <Avatar
                     sx={{
@@ -214,6 +223,7 @@ const Register: React.FC = () => {
                     sx={{
                       mb: 1,
                       fontWeight: 700,
+                      fontSize: { xs: '2rem', sm: '2.125rem' },
                       background: designTokens.colors.secondary.gradient,
                       backgroundClip: 'text',
                       WebkitBackgroundClip: 'text',
@@ -501,6 +511,7 @@ const Register: React.FC = () => {
                   overflow: 'hidden',
                   maxWidth: 350,
                   mx: 'auto',
+                  width: '100%',
                   '&:hover': {
                     transform: 'translateY(-8px) rotateY(-5deg)',
                     boxShadow: designTokens.shadows.strong,
@@ -513,7 +524,7 @@ const Register: React.FC = () => {
                   alt={t('Join Village Health Community')}
                   style={{
                     width: '100%',
-                    height: '450px',
+                    height: isMobile ? '260px' : '450px',
                     objectFit: 'cover',
                   }}
                 />
