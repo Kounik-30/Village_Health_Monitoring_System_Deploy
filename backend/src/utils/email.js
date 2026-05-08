@@ -4,7 +4,7 @@ function getMailConfig() {
   return {
     user: String(process.env.EMAIL_USER || '').trim(),
     pass: String(process.env.EMAIL_PASS || '').trim(),
-    to: null,
+    service: String(process.env.EMAIL_SERVICE || 'gmail').trim(),
   }
 }
 
@@ -18,14 +18,11 @@ function ensureMailConfig(config) {
 
 function createTransport(config) {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    service: config.service,
     auth: {
       user: config.user,
-      pass: config.pass
+      pass: config.pass,
     },
-    connectionTimeout: 10000
   })
 }
 
@@ -38,14 +35,17 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;')
 }
 
-export async function sendContactEmail({ name, email, subject, message }) {
+export async function sendContactEmail({
+  name,
+  email,
+  subject,
+  message,
+}) {
   const config = getMailConfig()
 
   ensureMailConfig(config)
 
   const transporter = createTransport(config)
-
-  await transporter.verify()
 
   const safeName = escapeHtml(name)
   const safeEmail = escapeHtml(email)
@@ -57,21 +57,40 @@ export async function sendContactEmail({ name, email, subject, message }) {
     to: email,
     replyTo: email,
     subject: `[Village Health Contact] ${subject}`,
-    text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
+
+    text: `
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+    `,
+
     html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-        <h2 style="margin-bottom: 16px;">New Contact Form Message</h2>
+        <h2 style="margin-bottom: 16px;">
+          New Contact Form Message
+        </h2>
 
-        <p><strong>Name:</strong> ${safeName}</p>
+        <p>
+          <strong>Name:</strong> ${safeName}
+        </p>
 
-        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p>
+          <strong>Email:</strong> ${safeEmail}
+        </p>
 
-        <p><strong>Subject:</strong> ${safeSubject}</p>
+        <p>
+          <strong>Subject:</strong> ${safeSubject}
+        </p>
 
-        <p><strong>Message:</strong></p>
+        <p>
+          <strong>Message:</strong>
+        </p>
 
         <p>${safeMessage}</p>
       </div>
-    `
+    `,
   })
 }
