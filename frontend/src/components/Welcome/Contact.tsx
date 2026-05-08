@@ -167,7 +167,7 @@ const Contact: React.FC = () => {
     {
       icon: <Email />,
       title: t('Email Us'),
-      content: 'support@villagehealthmonitor.com',
+      content: 'kounikbarasat2020@gmail.com',
       description: t('Get in touch via email for detailed inquiries'),
     },
     {
