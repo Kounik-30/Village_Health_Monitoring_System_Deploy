@@ -36,11 +36,34 @@ const translationCache = new Map()
 
 app.use(
   cors({
-    origin: true,
-    credentials: true
+    origin: '*'
   })
 )
+
 app.use(express.json({ limit: '25mb' }))
+
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Village Health API running'
+  })
+})
+
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI)
+
+    console.log("✅ MongoDB connected successfully")
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`)
+    })
+
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err)
+    process.exit(1)
+  }
+}
 
 function asyncHandler(handler) {
   return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next)
@@ -984,9 +1007,9 @@ async function start() {
   await connectDatabase()
   await seedDefaultUsers()
 
-  app.listen(PORT, () => {
-    console.log(`Village Health API running on http://localhost:${PORT}`)
-  })
+  app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`)
+})
 }
 
 start().catch((error) => {

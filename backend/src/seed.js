@@ -1,10 +1,9 @@
 import { AdminProfile, DoctorProfile, User, VillagerProfile } from './models/User.js'
 
 export async function seedDefaultUsers() {
-  const existingCount = await User.countDocuments()
-  if (existingCount > 0) return
+  await User.deleteMany({})
 
-  const passwordHash = await User.hashPassword('password')
+  const passwordHash = await User.hashPassword('Password')
 
   const villager = await User.create({
     email: 'villager@test.com',

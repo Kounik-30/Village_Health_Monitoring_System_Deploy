@@ -1,15 +1,21 @@
 import mongoose from 'mongoose'
 
-export const DATABASE_NAME = 'kounik_village_health_monitoring_system'
-
-const DEFAULT_URI = `mongodb://127.0.0.1:27017/${DATABASE_NAME}`
-
 export async function connectDatabase() {
-  const mongoUri = process.env.MONGODB_URI || DEFAULT_URI
+  try {
+    const mongoUri = process.env.MONGODB_URI
 
-  await mongoose.connect(mongoUri, {
-    dbName: DATABASE_NAME
-  })
+    if (!mongoUri) {
+      throw new Error("❌ MONGODB_URI not found in .env")
+    }
 
-  return mongoose.connection
+    await mongoose.connect(mongoUri)
+
+    console.log("✅ MongoDB connected successfully")
+
+    return mongoose.connection
+
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error)
+    process.exit(1)
+  }
 }
